@@ -4,9 +4,13 @@
     <meta charset="UTF-8" />
     <title>Pet anything!</title>
     <link rel="stylesheet" href="style/index-style.css">
+    <script src="js/script.js" defer></script>
 </head>
 <body>
-    <input type="file" accept="image/*">
-    <button>Load...</button>
+    <input id="imageInput" type="file" accept="image/*">
+    <button onclick="loadIMG()">Load...</button>
+    <div id="petContainer">
+        <img id="petDisplay" src="#">
+    </div>
 </body>
 </html>
