@@ -79,3 +79,28 @@ html{
 #settings{
     position: absolute;
 }
+#terminal{
+    background-color: rgba(0, 0, 0, 0.274);
+    width: 300px;
+    height: 150px;
+    position: absolute;
+    bottom: 0px;
+    color: yellow;
+    font-family: 'Courier New', Courier, monospace;
+    overflow-y: auto;
+    font-size: small;
+}
+#terminal::-webkit-scrollbar{
+    width: 10px;
+    background-color: rgba(0, 0, 0, 0.555);
+}
+#terminal::-webkit-scrollbar-thumb{
+    background-color: rgba(255, 255, 255, 0.144);
+}
+#terminalConsole{
+    width: 100%;
+    border: none;
+    background-color: rgba(0, 0, 0, 0.39);
+    color: white;
+    position: relative;
+}

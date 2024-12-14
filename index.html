@@ -12,11 +12,15 @@
             <button onclick="openWindow(0)">Customize...</button>
             <div id="customize">
                 <label for="bgColor">Background color:</label>
-                <input type="color" id="bgColor">
+                <input onchange="changeSetting(0)" type="color" id="bgColor">
                 <br>
                 <label>load image instantly:</label>
                 <input type="checkbox">
             </div>
+        </div>
+        <div id="terminal">
+            <input id="terminalConsole" type="text" autocomplete="off">
+            <!-- This wil only show text from script! -->
         </div>
         <div id="introThings">
             <h1>Welcome!</h1>

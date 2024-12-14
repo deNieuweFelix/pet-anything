@@ -6,6 +6,27 @@ const petDisplay = document.getElementById("petDisplay");
 const settings = document.getElementById("settings");
 const customizeWindow = document.getElementById("customize");
 
+const bgColorInput = document.getElementById("bgColor");
+
+const terminal = document.getElementById("terminal");
+const terminalConsole = document.getElementById("terminalConsole");
+
+terminalConsole.addEventListener("keydown", function(e){
+    if(e.code === "Enter"){
+        msg = terminalConsole.value;
+        switch(msg){
+            case '?help':
+                fTerminal.write(
+                    `Currently available commands:<br>
+                    - ?help: shows all commands`);
+                break;
+            default:
+                fTerminal.write('> ' + msg);
+            break;
+        }
+    } 
+});
+
 document.addEventListener("load", onLoad());
 
 let customizeWindowStatus = {
@@ -15,7 +36,7 @@ let customizeWindowStatus = {
 //you can change these settings in the source code to change them on load, lol
 let CustomSettings = {
     'bgColor': '#000011',
-    'instantLoad': true
+    'instantLoad': false
 };
 
 let imageDone = false;
@@ -84,5 +105,30 @@ function openWindow(window){
             break;
         default:
             break;
+    }
+}
+
+//0 = background color
+function changeSetting(setting){
+    switch(setting){
+        case 0:
+            console.log("ermm");
+            CustomSettings.bgColor = bgColorInput.value;
+            console.log(bgColorInput.value);
+
+            document.body.style.backgroundColor = CustomSettings.bgColor;
+
+            fTerminal.write(`bg changed to: ${CustomSettings.bgColor}`);
+            break;
+        default:
+            break;
+    }
+}
+
+const fTerminal = {
+    write: function(msg){
+        var msgP = document.createElement("p");
+        terminal.appendChild(msgP);
+        msgP.innerHTML = msg;
     }
 }
