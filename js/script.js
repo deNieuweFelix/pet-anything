@@ -12,9 +12,16 @@ function loadIMG(){
 
 function displayImage(img){
     const fileReader = new FileReader();
+    if(!img){
+        document.getElementById("warningFirstLoad").innerHTML = "Image not loaded <br> file not found, try choosing an image";
+    }
     
     fileReader.readAsDataURL(img);
     fileReader.addEventListener("load", function(){
-        petDisplay.src = this.result;
+        if(this.result){
+            petDisplay.src = this.result;
+            document.getElementById("warningFirstLoad").remove();
+            petDisplay.classList.add("downAnimation");
+        }
     })
 }

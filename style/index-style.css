@@ -1,7 +1,60 @@
+@keyframes goDown{
+    0%{
+        margin-top: 0vh;
+        filter: brightness(1000%);
+    }
+    100%{
+        margin-top: 20vh;
+        filter: brightness(100%);
+    }
+}
+
 *{
     padding: 0;
     margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 body{
     background-color: rgb(0, 0, 17);
+    color: whitesmoke;
+}
+html{
+    cursor: url("../img/hand_cursor.png"), pointer;
+    image-rendering: pixelated;
+}
+#petDisplay{
+    width: 300px;
+    height: 300px;
+    image-rendering: pixelated;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+#mainThings{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-self: center;
+    margin-top: 10vh;
+}
+#buttons{
+    margin-bottom: 5vh;
+}
+#introThings{
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    text-align: center;
+    margin-top: 3vh;
+}
+#introThings *{
+    margin-bottom: 1vh;
+}
+.downAnimation{
+    animation: goDown 2s ease-in forwards;
+}
+#petContainer p{
+    align-self: center;
+    text-align: center;
+    margin-bottom: 0.3vh;
+    color: red;
 }

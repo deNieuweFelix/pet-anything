@@ -7,10 +7,23 @@
     <script src="js/script.js" defer></script>
 </head>
 <body>
-    <input id="imageInput" type="file" accept="image/*">
-    <button onclick="loadIMG()">Load...</button>
-    <div id="petContainer">
-        <img id="petDisplay" src="#">
-    </div>
+    <main>
+        <div id="introThings">
+            <h1>Welcome!</h1>
+            <h2>How to use this "tool":</h2>
+            <p>First, upload an image using the file input.</p>
+            <p>Once you've chosen an image, press the "load" button</p>
+        </div>
+        <div id="mainThings">
+            <div id="buttons">
+                <input id="imageInput" type="file" accept="image/*">
+                <button onclick="loadIMG()">Load...</button>
+            </div>
+            <div id="petContainer">
+                <p id="warningFirstLoad">!!!load image first!!!</p>
+                <img id="petDisplay" src="#">
+            </div>
+        </div>
+    </main>
 </body>
 </html>
