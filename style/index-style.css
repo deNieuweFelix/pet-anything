@@ -8,6 +8,17 @@
         filter: brightness(100%);
     }
 }
+@keyframes pet{
+    0%{
+        transform: scaleX(1) scaleY(1);
+    }25%{
+        transform: scaleX(1.35) scaleY(0.85);
+    }75%{
+        transform: scaleX(0.85) scaleY(1.10);
+    }100%{
+        transform: scaleX(1) scaleY(1);
+    }
+}
 
 *{
     padding: 0;
@@ -28,6 +39,10 @@ html{
     image-rendering: pixelated;
     user-select: none;
     -webkit-user-drag: none;
+}
+#petDisplay:hover{
+    animation: pet .5s ease-in-out infinite forwards;
+    transition: transform .2s ease-in-out;
 }
 #mainThings{
     display: flex;
@@ -50,11 +65,17 @@ html{
     margin-bottom: 1vh;
 }
 .downAnimation{
-    animation: goDown 2s ease-in forwards;
+    animation: goDown 2s ease-in-out forwards;
+}
+.afterDownAnimation{
+    margin-top: 20vh;
 }
 #petContainer p{
     align-self: center;
     text-align: center;
     margin-bottom: 0.3vh;
     color: red;
+}
+#settings{
+    position: absolute;
 }
