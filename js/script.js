@@ -12,7 +12,21 @@ const instantLoadCheck = document.getElementById("instantLoadCheck");
 const terminal = document.getElementById("terminal");
 const terminalConsole = document.getElementById("terminalConsole");
 
+const autoCLRcon = document.getElementById("autoCLRcon");
+const customCLRint = document.getElementById("customCLRint");
+const customCLRval = document.getElementById("customCLRval");
+
+const closeButton = document.getElementById("closeButton");
+const miniButton = document.getElementById("miniButton");
+
+const rockPaperScissors = document.getElementById("rockPaperScissors");
+
+const dialogue = document.getElementById("dialogue");
+const faceDisplay = document.getElementById("faceDisplay");
+
 const allMessages = [];
+
+let currentLongLoop = 0;
 
 terminalConsole.addEventListener("keydown", function(e){
     if(e.code === "Enter"){
@@ -45,6 +59,7 @@ terminalConsole.addEventListener("keydown", function(e){
                             CustomSettings.instantLoad = false;
                         }else{
                             fTerminal.write("incorrect syntax: !instantLoad true / false", 'orange');
+                            fTerminal.Error("001 incorrect syntax!");
                         }
                     }else if(msg.includes("bgCol")){
                         if(msg.includes("reset")){
@@ -79,6 +94,48 @@ terminalConsole.addEventListener("keydown", function(e){
                         }
                     }else if(msg.includes("!!reload")){
                         location.reload();
+                    }else if(msg.includes("terminal")){
+                        if(msg.includes("-width")){
+                            if(msg.includes("reset")){
+                                CustomSettings.customConsoleWidth = null;
+                                terminal.style.width = '300px';
+                                fTerminal.write('resetted console width', 'green');
+                            }else if(msg.includes("-grow")){
+                                if(CustomSettings.customConsoleWidth){
+                                    CustomSettings.customConsoleWidth + CustomSettings.growValue;
+                                    terminal.style.width = CustomSettings.customConsoleWidth + 'px';
+                                    fTerminal.write(`grew console width with ${CustomSettings.growValue}px`, 'green');
+                                }else{
+                                    fTerminal.write('This command only works with custom width.', 'red');
+                                }
+                            }else if(msg.includes("-shrink")){
+                                if(CustomSettings.customConsoleWidth){
+                                    CustomSettings.customConsoleWidth - CustomSettings.shrinkValue;
+                                    terminal.style.width = CustomSettings.customConsoleWidth + 'px';
+                                    fTerminal.write(`shrunk console width with ${CustomSettings.shrinkValue}px`, 'green');
+                                }
+                            }else{
+                                CustomSettings.customConsoleWidth = prompt("new console width:");
+                                terminal.style.width = CustomSettings.customConsoleWidth + 'px';
+                                fTerminal.write(`set console width to: ${CustomSettings.customConsoleWidth}px`, 'green');
+                            }
+                        }
+                    }else if(msg.includes("game")){
+                        if(msg.includes("-rps")){
+                            if(msg.includes("-terminal")){
+                                rockPaperScissorsGame(prompt("0 / 1 / 2 (rock / paper / scissors)"));
+                            }else{
+                                if(CustomSettings.miniGames.RPS.closed == true){
+                                    fTerminal.write("opening rock paper scissors game...", 'green');
+                                    document.body.append(rockPaperScissors);
+                                    CustomSettings.miniGames.RPS.closed = false;
+                                }else{
+                                    fTerminal.write("closing rock paper scissors game...", 'yellow');
+                                    document.body.removeChild(rockPaperScissors);
+                                    CustomSettings.miniGames.RPS.closed = true;
+                                }
+                            }
+                        }
                     }
                 }else if(msg.includes("?")){
                     //commands that will retrieve a value
@@ -86,6 +143,10 @@ terminalConsole.addEventListener("keydown", function(e){
                         fTerminal.write(`instaload: ${CustomSettings.instantLoad}`, 'blue');
                     }else if(msg.includes("bgCol")){
                         fTerminal.write(`backgroundCol: ${CustomSettings.bgColor}`, 'blue');
+                    }else if(msg.includes("longLoop")){
+                        fTerminal.write(`current long loops performed: ${currentLongLoop}`, 'blue');
+                    }else if(msg.includes("sessionLength")){
+                        fTerminal.write(`current session length: ${currentLongLoop * 2}`, 'blue');
                     }
                 }
             break;
@@ -103,15 +164,27 @@ let customizeWindowStatus = {
 let CustomSettings = {
     'bgColor': '#000011',
     'instantLoad': false,
-    'customTitle': ''
+    'autoClearConsole': false,
+    'autoClearInterval': 1,
+    'customTitle': '',
+    'customConsoleWidth': null,
+    'customConsoleHeight': null,
+    'growValue': 50,
+    'shrinkValue': 50,
+    'miniGames': {
+        'RPS': {
+            'minimised': false,
+            'closed': true
+        }
+    }
 };
 
 let imageDone = false;
 
+rockPaperScissors.remove();
 
 function onLoad(){
     customizeWindow.remove();
-
     setTimeout(autoLoad, 150);
 }
 
@@ -177,6 +250,8 @@ function openWindow(window){
 }
 
 //0 = background color
+//1 = toggle instant load
+//2 = toggle auto clear console
 function changeSetting(setting){
     switch(setting){
         case 0:
@@ -196,6 +271,16 @@ function changeSetting(setting){
                 fTerminal.write("instantLoad: off", 'red');
                 CustomSettings.instantLoad = false;
             }
+            break;
+        case 2:
+            if(autoCLRcon.checked){
+                customCLRint.removeAttribute('disabled');
+                CustomSettings.autoClearConsole = true;
+            }else{
+                customCLRint.disabled = true;
+                CustomSettings.autoClearConsole = false;
+            }
+            break;
         default:
             break;
     }
@@ -208,9 +293,224 @@ const fTerminal = {
         msgP.style.color = clr;
         msgP.innerHTML = msg;
         allMessages.push(msgP);
+    },
+    clear: function(){
+        allMessages.forEach(msg => {
+            msg.remove();
+        });
+        allMessages = [];
+    },
+    Error: function(code){
+        fTerminal.write("!Error -> " + code, 'red');
+        console.log(code);
     }
 }
 
 var mainLongLoop = setInterval(function(){
     autoLoad();
+    currentLongLoop++;
 }, 2000);
+
+setInterval(function(){
+    console.log("fruuuu");
+    if(CustomSettings.autoClearConsole){
+        fTerminal.clear();
+    }
+}(CustomSettings.autoClearInterval));
+
+function rpsTopBarControls(i){
+    switch(i){
+        case 0:
+            document.body.removeChild(rockPaperScissors);
+            CustomSettings.miniGames.RPS.closed = true;
+            break;
+        case 1:
+            if(CustomSettings.miniGames.RPS.minimised == false){
+                rockPaperScissors.style.transform = "scale(0.25)";
+                rockPaperScissors.style.bottom = "-150px";
+                rockPaperScissors.style.right = "-220px";
+                rockPaperScissors.classList.add("idleAnimation");
+                for(const child of rockPaperScissors.children){
+                    child.classList.add("idleAnimation");
+                    for(const grandChild of child.children){
+                        grandChild.classList.add("idleAnimation");
+                        for(const grandChild2 of grandChild.children){
+                            grandChild2.classList.add("idleAnimation");
+                        }
+                    }
+                }
+                setTimeout(() => {
+                    CustomSettings.miniGames.RPS.minimised = true;
+                }, 100);
+            }
+            break;
+        case 2:
+            if(CustomSettings.miniGames.RPS.minimised == true){
+                rockPaperScissors.style.transform = "scale(1)";
+                rockPaperScissors.style.bottom = "50px";
+                rockPaperScissors.style.right = "20px";
+                rockPaperScissors.classList.remove("idleAnimation");
+                for(const child of rockPaperScissors.children){
+                    child.classList.remove("idleAnimation");
+                    for(const grandChild of child.children){
+                        grandChild.classList.remove("idleAnimation");
+                        for(const grandChild2 of grandChild.children){
+                            grandChild2.classList.remove("idleAnimation");
+                        }
+                    }
+                }
+                setTimeout(() => {
+                    CustomSettings.miniGames.RPS.minimised = false;
+                });
+            }
+            break;
+        default:
+            break;
+    }
+}
+
+function rockPaperScissorsGame(choice){
+    clearTimeout(resetFaceTimeout);
+    var RPSdata = {
+        playerChoice: choice,
+        fullPlayerChoice: undefined,
+        botChoice: undefined,
+        fullBotChoice: undefined,
+        winStatus: false,
+        winner: undefined,
+        message: undefined,
+        face: undefined
+    };
+
+    //translate the numbers to an actual word i guess
+    switch(RPSdata.playerChoice){
+        case 0:
+            RPSdata.fullPlayerChoice = "rock";
+            break;
+        case 1:
+            RPSdata.fullPlayerChoice = "paper";
+            break;
+        case 2:
+            RPSdata.fullPlayerChoice = "scissors";
+            break;
+        default:
+            RPSdata.fullPlayerChoice = null;
+            break;
+    }
+
+    //get and translate the bot choice (:
+    RPSdata.botChoice = Math.floor(Math.random() * 3);
+    switch(RPSdata.botChoice){
+        case 0:
+            RPSdata.fullBotChoice = "rock";
+            break;
+        case 1:
+            RPSdata.fullBotChoice = "paper";
+            break;
+        case 2:
+            RPSdata.fullBotChoice = "scissors";
+            break;
+        default:
+            RPSdata.fullBotChoice = null;
+            break;
+    }
+
+    //calculate them results!!!
+
+    //note to self:
+    //0 = rock
+    //1 = paper
+    //2 = scissors
+    switch (RPSdata.playerChoice) {
+        case 0: // Player chooses rock
+            switch (RPSdata.botChoice) {
+                case 0: // Bot chooses rock
+                    RPSdata.winStatus = false;
+                    RPSdata.winner = 'none'; // Tie
+                    break;
+                case 1: // Bot chooses paper
+                    RPSdata.winStatus = true;
+                    RPSdata.winner = 'bot';
+                    break;
+                case 2: // Bot chooses scissors
+                    RPSdata.winStatus = true;
+                    RPSdata.winner = 'player';
+                    break;
+                default:
+                    fTerminal.write("unknown error, try again", 'red');
+                    break;
+            }
+            break;
+    
+        case 1: // Player chooses paper
+            switch (RPSdata.botChoice) {
+                case 0: // Bot chooses rock
+                    RPSdata.winStatus = true;
+                    RPSdata.winner = 'player';
+                    break;
+                case 1: // Bot chooses paper
+                    RPSdata.winStatus = false;
+                    RPSdata.winner = 'none'; // Tie
+                    break;
+                case 2: // Bot chooses scissors
+                    RPSdata.winStatus = true;
+                    RPSdata.winner = 'bot';
+                    break;
+                default:
+                    fTerminal.write("unknown error, try again", 'red');
+                    break;
+            }
+            break;
+    
+        case 2: // Player chooses scissors
+            switch (RPSdata.botChoice) {
+                case 0: // Bot chooses rock
+                    RPSdata.winStatus = true;
+                    RPSdata.winner = 'bot';
+                    break;
+                case 1: // Bot chooses paper
+                    RPSdata.winStatus = true;
+                    RPSdata.winner = 'player';
+                    break;
+                case 2: // Bot chooses scissors
+                    RPSdata.winStatus = false;
+                    RPSdata.winner = 'none'; // Tie
+                    break;
+                default:
+                    fTerminal.write("unknown error, try again", 'red');
+                    break;
+            }
+            break;
+    
+        default:
+            fTerminal.write("Invalid player choice", 'red');
+            break;
+    }
+
+    RPSdata.message = `Player chose: ${RPSdata.fullPlayerChoice}, Bot chose: ${RPSdata.fullBotChoice}. ${RPSdata.winner} won!`;
+
+    if(dialogue){
+        dialogue.innerHTML = RPSdata.message;
+    }
+    if(RPSdata.winner == 'player'){
+        fTerminal.write(RPSdata.message, 'green');
+        RPSdata.face = '):';
+    }else{
+        fTerminal.write(RPSdata.message, 'red');
+        if(RPSdata.winner == 'bot'){
+            RPSdata.face = '(:<';
+        }else{
+            RPSdata.face = 'O:';
+        }
+    }
+    faceDisplay.innerHTML = RPSdata.face;
+
+    var resetFaceTimeout = setTimeout(() => {
+        faceDisplay.innerHTML = '(:'
+    }, 2500);
+
+    if(RPSdata.winner == undefined){
+        fTerminal.Error(":-rps-1: undefined winner");
+    }
+    console.log(RPSdata);
+}

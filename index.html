@@ -16,6 +16,16 @@
                 <br>
                 <label>load image instantly:</label>
                 <input onclick="changeSetting(1)" type="checkbox" id="instantLoadCheck">
+                <br>
+                <label>Automatically clear console:</label>
+                <input id="autoCLRcon" type="checkbox" onclick="changeSetting(2)">
+                <br>
+                <label>Custom clear interval:</label>
+                <input id="customCLRint" type="checkbox" disabled>
+                <br>
+                <label>Custom interval:</label>
+                <br>
+                <input id="customCLRval" type="range" disabled>
             </div>
         </div>
         <div id="terminal">
@@ -36,6 +46,26 @@
             <div id="petContainer">
                 <p id="warningFirstLoad">!!!load image first!!!</p>
                 <img id="petDisplay" src="#">
+            </div>
+        </div>
+        <div id="miniGames">
+            <div id="rockPaperScissors" onclick="rpsTopBarControls(2)">
+                <div id="topBar">
+                    <button id="closeButton" onclick="rpsTopBarControls(0)">X</button>
+                    <button id="miniButton" onclick="rpsTopBarControls(1)">_</button>
+                </div>
+                <div id="character">
+                    <div id="head"><p id="faceDisplay">(:</p></div>
+                    <div id="torso"></div>
+                    <div id="dialogueBox">
+                        <p id="dialogue">This is some dialogue</p>
+                    </div>
+                    <div id="optionHolder">
+                        <div class="rpcChoice" onclick="rockPaperScissorsGame(0)"><p>Rock</p></div>
+                        <div class="rpcChoice" onclick="rockPaperScissorsGame(1)"><p>Paper</p></div>
+                        <div class="rpcChoice" onclick="rockPaperScissorsGame(2)"><p>Scissors</p></div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>

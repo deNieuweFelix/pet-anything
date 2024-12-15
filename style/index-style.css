@@ -19,6 +19,15 @@
         transform: scaleX(1) scaleY(1);
     }
 }
+@keyframes levitate{
+    0%{
+        margin-top: -7px;
+    }50%{
+        margin-top: 7px;
+    }100%{
+        margin-top: -7px;
+    }
+}
 
 *{
     padding: 0;
@@ -96,6 +105,19 @@ html{
 }
 #terminal::-webkit-scrollbar-thumb{
     background-color: rgba(255, 255, 255, 0.144);
+    transition: all .2s ease-in-out;
+    height: 40px;
+}
+#terminal::-webkit-scrollbar-thumb:hover{
+    height: 50px;
+    background-color: rgba(255, 255, 255, 0.210);
+}
+#terminal::-webkit-scrollbar-button{
+    background-color: rgba(255, 255, 255, 0.39);
+    height: 5px;
+}
+#terminal::-webkit-scrollbar-corner{
+    background-color: red;
 }
 #terminalConsole{
     width: 100%;
@@ -103,4 +125,189 @@ html{
     background-color: rgba(0, 0, 0, 0.39);
     color: white;
     position: relative;
+}
+#terminalConsole:focus{
+    outline: none;
+}
+#rockPaperScissors{
+    position: absolute;
+    background-color: rgb(173, 0, 0);
+    background-image: radial-gradient(rgb(73, 0, 0), rgb(134, 0, 0));
+    height: 400px;
+    width: 600px;
+    border: 10px rgb(0, 66, 0) solid;
+    border-radius: 20px;
+    right: 20px;
+    bottom: 50px;
+}
+#head{
+    background-color: yellow;
+    position: absolute;
+    height: 100px;
+    width: 100px;
+    background-image: radial-gradient(yellow, orange);
+    left: 20px;
+    top: 20px;
+    border-radius: 20px;
+    text-align: center;
+    filter: drop-shadow(0px 0px 10px yellow);
+    animation: levitate 3s infinite ease-in-out;
+}
+#head p{
+    position: absolute;
+    top: 30px;
+    text-align: center;
+    width: 100%;
+    font-size: xx-large;
+    transform: rotate(-90deg);
+    color: black;
+    font-weight: bolder;
+}
+#torso{
+    background-color: green;
+    position: absolute;
+    height: 80px;
+    width: 50px;
+    background-image: 
+    radial-gradient(green, darkgreen);
+    filter: drop-shadow(0px 0px 10px green);
+    left: 45px;
+    top: 140px;
+    border-top-left-radius: 10px; border-top-right-radius: 10px;
+    border-bottom-right-radius: 25px; border-bottom-left-radius: 25px;
+    animation: levitate 3.5s infinite ease-in-out;
+}
+#dialogueBox{
+    background-color: white;
+    width: 500px;
+    height: 200px;
+    clip-path: polygon(17% 49%, 35% 34%, 79% 34%, 79% 64%, 36% 62%);
+    position: absolute;
+    left: 80px;
+    top: -20px;
+    color: black;
+    text-align: center;
+    animation: levitate 3.1s infinite ease-in-out;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+#dialogueBox p{
+    position: absolute;
+    top: 85px;
+    left: 135px;
+    width: 250px;
+    text-align: center;
+}
+#optionHolder{
+    width: 400px;
+    height: 200px;
+    background-color: rgba(0, 0, 0, 0.233);
+    position: absolute;
+    top: 135px;
+    left: 150px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+.rpcChoice{
+    width: 25%;
+    height: 150px;
+    background-color: aliceblue;
+    background-image: 
+    repeating-linear-gradient(to left top, rgba(0, 0, 0, 0.075), transparent 10%),
+    repeating-linear-gradient(to right top, rgba(0, 0, 0, 0.075), transparent 10%);
+    border-radius: 20px;
+    border: 5px solid;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    color: black;
+    align-items: center;
+    font-size: x-large;
+    font-weight:bolder;
+    position: relative;
+    transition: all .1s ease-in-out;
+    bottom: 0;
+}
+.rpcChoice:nth-child(1){
+    border-color: red;
+}
+.rpcChoice:nth-child(2){
+    border-color: green;
+}
+.rpcChoice:nth-child(3){
+    border-color: blue;
+}
+.rpcChoice p{
+    -webkit-text-stroke-color: rgb(255, 255, 255);
+    -webkit-text-stroke-width: 1px;
+}
+.rpcChoice:hover{
+    bottom: 30px;
+    transform: scale(1.2);
+}
+.rpcChoice:hover:not(:hover){
+    transform: scale(0.8);
+}
+#topBar{
+    background-color: gray;
+    background-image: linear-gradient(rgba(110, 110, 110, 0.493), rgba(59, 59, 59, 0.527)),
+    linear-gradient(to left,transparent, rgb(255, 255, 255) 10%, transparent 10%, white 7%, transparent 70%),
+    linear-gradient(to right, transparent, rgb(255, 255, 255) 10%, transparent),
+    linear-gradient(to right, transparent, rgb(220, 228, 247) 5%, transparent),
+    linear-gradient(to left, rgb(40, 40, 40), rgb(66, 66, 66));
+    width: 100%;
+    height: 40px;
+    position: relative;
+    z-index: 10;
+    bottom: 35px;
+    padding-left: 10px;
+    padding-right: 10px;
+    right: 10px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+#topBar button{
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+    border: 2px gray inset;
+    text-align: center;
+    transition: all .1s ease-in-out;
+    filter: none;
+    position: relative;
+    z-index: 11;
+}
+#topBar button:nth-child(1){
+    background-color: red;
+    background-image:
+    radial-gradient(rgba(255, 255, 255, 0.096), rgba(0, 0, 0, 0.438) 80%),
+    radial-gradient( rgb(255, 121, 143), red);
+}
+#topBar button:nth-child(2){
+    background-color: yellow;
+    background-image:
+    radial-gradient(rgba(255, 255, 255, 0.096), rgba(0, 0, 0, 0.438) 80%),
+    radial-gradient(rgb(217, 219, 79), rgb(212, 110, 15));
+}
+#topBar button:hover{
+    filter: brightness(135%) contrast(115%);
+}
+#topBar button:active{
+    filter: brightness(70%) contrast(120%);
+}
+.idleAnimation{
+    animation: none !important;
+    shape-rendering:optimizeSpeed;
+    text-rendering: optimizeSpeed;
+    image-rendering: pixelated;
+    background-image: unset !important;
 }
