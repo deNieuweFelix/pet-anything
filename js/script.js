@@ -15,6 +15,7 @@ const terminalConsole = document.getElementById("terminalConsole");
 const autoCLRcon = document.getElementById("autoCLRcon");
 const customCLRint = document.getElementById("customCLRint");
 const customCLRval = document.getElementById("customCLRval");
+const noSaveMeta = document.getElementById("noSaveMeta");
 
 const closeButton = document.getElementById("closeButton");
 const miniButton = document.getElementById("miniButton");
@@ -24,7 +25,12 @@ const rockPaperScissors = document.getElementById("rockPaperScissors");
 const dialogue = document.getElementById("dialogue");
 const faceDisplay = document.getElementById("faceDisplay");
 
+const clock = document.getElementById("clock");
+const clockDisplay = document.getElementById("clockDisplay");
+const clockDateDisplay = document.getElementById("clockDateDisplay");
+
 const allMessages = [];
+const MSGinfo = [];
 
 let currentLongLoop = 0;
 
@@ -136,6 +142,24 @@ terminalConsole.addEventListener("keydown", function(e){
                                 }
                             }
                         }
+                    }else if(msg.includes("acti")){
+                        if(msg.includes("-coinFlip")){
+                            if(msg.includes("-log")){
+                            }
+                        }
+                    }else if(msg.includes("app")){
+                        if(msg.includes("-clk")){
+                            if(CustomSettings.apps.clock.closed == true){
+                                CustomSettings.apps.clock.closed = false;
+                                document.body.appendChild(clock);
+                                fTerminal.write("opened clock app", 'green');
+                            }else{
+                                CustomSettings.apps.clock.closed = true;
+                                clock.remove();
+                                fTerminal.write("closed clock app", 'yellow');
+                                
+                            }
+                        }
                     }
                 }else if(msg.includes("?")){
                     //commands that will retrieve a value
@@ -147,6 +171,51 @@ terminalConsole.addEventListener("keydown", function(e){
                         fTerminal.write(`current long loops performed: ${currentLongLoop}`, 'blue');
                     }else if(msg.includes("sessionLength")){
                         fTerminal.write(`current session length: ${currentLongLoop * 2}`, 'blue');
+                    }else if(msg.includes("metaConsole")){
+                        let i = 0;
+                        for(const msg of MSGinfo){
+                            i++;
+                            console.log(`message number: ${i}`);
+                            console.log(`message content: ${msg.MSG}`);
+                            console.log(`message color: ${msg.CLR}`);
+                            console.log(`message time: ${msg.TME.HRS}:${msg.TME.MIN}:${msg.TME.SEC}`);
+                            console.log('\n');
+                        }
+                        fTerminal.write("all terminal meta info logged to console", 'green');
+                    }else if(msg.includes("metaSearch")){
+                        if(msg.includes("-char")){
+                            const charToSearch = prompt("search for what character?");
+                            if(charToSearch != ""){
+                                const foundMSGs = [];
+                                let numOfMSG = 0;
+                                for(const msg of MSGinfo){
+                                    if((msg.MSG).includes(charToSearch)){
+                                        console.log(`found: ${msg.MSG}`);
+                                        numOfMSG++;
+                                        foundMSGs.push(msg.MSG);
+                                    }
+                                }
+                                fTerminal.write(`found ${numOfMSG} messages`);
+                                for(const fndMSG of foundMSGs){
+                                    fTerminal.write(fndMSG, 'lime');
+                                }
+                            }
+                        }else if(msg.includes("-dwn")){
+                            const downloadA = document.createElement("a");
+                            const downloadContent = [];
+                            for(const msg of MSGinfo){
+                                const contToPush = `${msg.MSG}, ${msg.CLR}, ${msg.TME.HRS}:${msg.TME.MIN}:${msg.TME.SEC} \n`;
+                                downloadContent.push(contToPush);
+                            }
+                            downloadContent.push("\n this is an official metaSearch file :3 :3 :3 \n do NOT remove these lines!");
+                            downloadContent.push("\n thanks for using pet anything <3");
+                            const dataToDownload = downloadContent.join("");
+                            const file = new Blob([dataToDownload], {type: 'text/plain'});
+                            downloadA.href = URL.createObjectURL(file);
+                            downloadA.download = "msg_meta_data.txt";
+                            downloadA.click();
+                            URL.revokeObjectURL(downloadA.href);
+                        }
                     }
                 }
             break;
@@ -162,19 +231,25 @@ let customizeWindowStatus = {
 
 //you can change these settings in the source code to change them on load, lol
 let CustomSettings = {
-    'bgColor': '#000011',
-    'instantLoad': false,
-    'autoClearConsole': false,
-    'autoClearInterval': 1,
-    'customTitle': '',
-    'customConsoleWidth': null,
-    'customConsoleHeight': null,
-    'growValue': 50,
-    'shrinkValue': 50,
-    'miniGames': {
-        'RPS': {
-            'minimised': false,
-            'closed': true
+    bgColor: '#000011',
+    instantLoad: false,
+    autoClearConsole: false,
+    autoClearInterval: 1,
+    customTitle: '',
+    noSaveMeta: false,
+    customConsoleWidth: null,
+    customConsoleHeight: null,
+    growValue: 50,
+    shrinkValue: 50,
+    miniGames: {
+        RPS: {
+            minimised: false,
+            closed: true
+        }
+    },
+    apps: {
+        clock: {
+            closed: true
         }
     }
 };
@@ -182,6 +257,7 @@ let CustomSettings = {
 let imageDone = false;
 
 rockPaperScissors.remove();
+clock.remove();
 
 function onLoad(){
     customizeWindow.remove();
@@ -281,6 +357,15 @@ function changeSetting(setting){
                 CustomSettings.autoClearConsole = false;
             }
             break;
+        case 3:
+            if(noSaveMeta.checked){
+                CustomSettings.noSaveMeta = true;
+                fTerminal.write("disabled meta data", 'red');
+            }else{
+                CustomSettings.noSaveMeta = false;
+                fTerminal.write("enabled meta data", 'green');
+            }
+            break;
         default:
             break;
     }
@@ -288,11 +373,24 @@ function changeSetting(setting){
 
 const fTerminal = {
     write: function(msg, clr){
+        const metaDate = new Date;
         var msgP = document.createElement("p");
+        var MSGmeta = {
+            MSG: msg,
+            CLR: clr,
+            TME: {
+                SEC: metaDate.getSeconds(),
+                MIN: metaDate.getMinutes(),
+                HRS: metaDate.getHours()
+            }
+        };
         terminal.appendChild(msgP);
         msgP.style.color = clr;
         msgP.innerHTML = msg;
         allMessages.push(msgP);
+        if(!CustomSettings.noSaveMeta){
+            MSGinfo.push(MSGmeta);
+        }
     },
     clear: function(){
         allMessages.forEach(msg => {
@@ -513,4 +611,88 @@ function rockPaperScissorsGame(choice){
         fTerminal.Error(":-rps-1: undefined winner");
     }
     console.log(RPSdata);
+}
+
+function coinFlip(mode){
+    
+}
+
+//make that clocky work
+var clockInterval = setInterval(function(){
+    const curTime = new Date;
+    curSec = (curTime.getSeconds());
+    if(curSec < 10){
+        curSec = "0" + (curTime.getSeconds());
+    }
+    curMin = (curTime.getMinutes());
+    if(curMin < 10){
+        curMin = "0" + (curTime.getMinutes());
+    }
+    curHr = (curTime.getHours()).toPrecision(2);
+    if(curHr < 10){
+        curHr = "0" + (curTime.getHours());
+    }
+    clockDisplay.innerHTML = `${curHr}:${curMin}:${curSec}`;
+}, 1000);
+
+var clockDateInterval = setInterval(function(){
+    const curDate = new Date()
+    const curDay = curDate.getDay();
+    let dateString;
+    switch(curDay){
+        case 1:
+            dateString = "Monday";
+            break;
+        case 2:
+            dateString = "Tuesday";
+            break;
+        case 3:
+            dateString = "Wednesday";
+            break;
+        case 4:
+            dateString = "Thursday";
+            break;
+        case 5:
+            dateString = "Friday";
+            break;
+        case 6:
+            dateString = "Saturday";
+            break;
+        case 7:
+            dateString = "Sunday";
+            break;
+        default:
+            dateString = "Error loading date...";
+            break;
+    };
+    clockDateDisplay.innerHTML = `${dateString}, ${curDate.getUTCDate()}`;
+}, 2000);
+
+// onmousemove = function(e){
+//     if(clock.onmousedown){
+//         console.log("aaa", e.clientY);
+//         clock.style.top = e.clientY + "px";
+//     }
+// }
+clock.addEventListener("mousedown", function(e){
+    isDragging = true;
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
+});
+
+function onMouseMove(e){
+    if(isDragging){
+        if(!(e.clientY >= (window.innerHeight) - (clock.offsetHeight) / 2)){
+            console.log(e.clientY);
+            if(e.clientY >= (clock.offsetHeight / 2)){
+                clock.style.top = `${e.clientY - clock.offsetHeight / 2}px`;
+            }
+        }
+    }
+}
+
+function onMouseUp(){
+    isDragging = false;
+    document.removeEventListener("mousemove", onMouseMove);
+    document.removeEventListener("mouseup", onMouseUp);
 }

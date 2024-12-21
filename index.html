@@ -26,6 +26,9 @@
                 <label>Custom interval:</label>
                 <br>
                 <input id="customCLRval" type="range" disabled>
+                <br>
+                <label>Don't save meta data (might cause issues):</label>
+                <input id="noSaveMeta" type="checkbox" onclick="changeSetting(3)">
             </div>
         </div>
         <div id="terminal">
@@ -67,6 +70,34 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div id="apps">
+            <div id="clock">
+                <h1 id="clockDisplay">00:00:00</h1>
+                <h2 id="clockDateDisplay">wednesday, 10</h2>
+            </div>
+            <!-- <div id="calculator">
+                <div id="calcScreen">
+                    <h1>00000</h1>
+                </div>
+                <div id="calcBtns">
+                    <button>0</button>
+                    <button>1</button>
+                    <button>2</button>
+                    <button>3</button>
+                    <button>4</button>
+                    <button>5</button>
+                    <button>6</button>
+                    <button>7</button>
+                    <button>8</button>
+                    <button>9</button>
+                    <button>+</button>
+                    <button>-</button>
+                    <button>*</button>
+                    <button>c</button>
+                    <button>></button>
+                </div>
+            </div> -->
         </div>
     </main>
 </body>

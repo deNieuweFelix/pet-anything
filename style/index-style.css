@@ -311,3 +311,59 @@ html{
     image-rendering: pixelated;
     background-image: unset !important;
 }
+#clock{
+    /* background-color: rgba(76, 0, 130, 0.39); */
+    background-image: 
+    linear-gradient(to left, rgba(255, 255, 255, 0) 20%, rgba(76, 0, 130, 0.39));
+    width: 300px;
+    height: 100px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 30px;
+    padding-left: 20px;
+    padding-top: 5px;
+    position: absolute;
+    user-select: none;
+    transition: width, filter .2s ease-in-out;
+}
+#clock:hover{
+    filter: brightness(180%);
+    width: 400px;
+}
+#calculator{
+    background-color: rgb(71, 71, 71);
+    border-radius: 15px;
+    height: 300px;
+    width: 200px;
+    border: rgb(99, 98, 98) groove 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: linear-gradient(to bottom right, rgba(85, 85, 85, 0.26), transparent);
+}
+#calcBtns button{
+    width: 25%;
+    height: 22px;
+    margin-top: 20px;
+    margin-left: 1px; margin-right: 1px;
+    background-color: rgb(49, 49, 49);
+    border: groove rgb(37, 37, 37) 2px;
+    border-radius: 3px;
+    background-image: linear-gradient(to bottom right,rgba(141, 141, 141, 0.479), transparent);
+}
+#calcBtns{
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+#calcScreen{
+    background-color: darkgreen;
+    width: 170px;
+    border-radius: 7px;
+    padding-left: 3px;
+    color: rgba(0, 0, 0, 0.781);
+    background-image: 
+    repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.349), transparent),
+    repeating-linear-gradient(to top,rgba(0, 0, 0, 0.603), transparent);
+}
